@@ -1,0 +1,72 @@
+<div class="menu">
+  <a href="messages/new" class="PseudoButton"><span>Create new</span></a>
+</div>
+<div class="messages_list">
+  <% @messages.each do |message| %>
+    <div id="<%= message.id %>" class="message<%= ' important' if message.importance? %>">
+      <div class="anchor">
+        <span class="popup">
+          <a href="/messages/<%= message.id %>" class="remove">Delete</a>&nbsp;|
+          <a href="/messages/<%= message.id %>/edit">Edit</a>&nbsp;|
+          <%= check_box_tag 'imortance', "", message.importance?, :class => "importance", :title => "Importance On/Off" %>
+        </span>
+      </div>
+      <h4 class="title"><%= message.title %></h4>
+      <div class="body"><%= message.body.length > 512 ? message.body.slice(0..511)+'…' : message.body %></div>
+
+    </div>
+  <% end %>
+</div>
+
+<%=  content_for :jscript do %>
+$(function(){
+    function toggleChecked(){
+
+      return this;
+    }
+    $('.importance').click(function(){
+      //event.preventDefault();
+      var $line = $(this).closest('.message');
+      $.ajax({
+        url : '/messages/'+$line.attr("id")+'/toggle',
+        type: 'PUT',
+        cache : false,
+        async : false,
+        success : ToggleImportance,
+        error: function(XMLHttpRequest, textStatus, errorThrown){alert("error!");}
+      })
+    });
+    $('.remove').click(function(){
+      event.preventDefault();
+      $line = $(this).closest('.message');
+      $line.css('background-color','orange');
+      if(confirm("Are you sure you want to delete selected user?")==true){
+        $.ajax({
+          url : $(this).attr("href"),
+          type: 'DELETE',
+          cache : false,
+          async : false,
+          success : Remove,
+          error: function(XMLHttpRequest, textStatus, errorThrown){alert("error!");}
+        })
+      }
+      else $line.css('background-color','');
+    });
+    function ToggleImportance ( response ) {
+      if ('OK' == response.status){
+        $cb = $('#'+response.id).toggleClass('important').find('input');
+        if ( response.state ){
+            $cb.attr("checked", "checked");
+        }
+        else {
+            $cb.removeAttr("checked")
+        }
+      }
+    };
+    function Remove ( response ) {
+      if ('OK' == response.status){
+        $('#'+response.id).remove();
+      }
+    };
+});
+<% end %>

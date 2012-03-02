@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Messaging</title>
+  <%= stylesheet_link_tag    "application", :media => "all" %>
+  <%= javascript_include_tag "application" %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+
+    <div class="container">
+      <div class="header">
+      <div class="panel">
+        <% if signed_in? %>
+            <%= link_to "Messages", "/messages" %>
+            <%= link_to "Logout", "/logout" %>
+        <% else %>
+            <%= form_tag('/login') do %>
+                <div class="field">
+                  <%= label_tag :email %></br>
+                  <%= text_field_tag :email %>
+                </div>
+                <div class="field">
+                  <%= label_tag :password %></br>
+                  <%= text_field_tag :password %>
+                </div>
+                <div class="actions">
+                  <%= submit_tag 'Login' %>
+                </div>
+            <% end %>
+        <% end %>
+      </div>
+      </div>
+
+      <div class="content">
+        <%= yield %>
+      </div>
+
+    </div>
+
+</body>
+
+<script  type="text/javascript">
+<%= yield :jscript %>
+</script>
+
+</html>

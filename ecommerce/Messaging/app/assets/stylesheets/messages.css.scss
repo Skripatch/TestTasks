@@ -1,0 +1,24 @@
+// Place all the styles related to the messages controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+.message{
+  position: relative;
+}
+.message.important{
+  background-color: #fafad2;
+}
+.message:hover > .anchor{
+  display: block;
+}
+.anchor{
+  position: absolute;
+  display: none
+}
+.popup{
+  position: absolute;
+  right: 0px;
+  width: 7em;
+}
+h4.title{
+  padding-left: 2.66em;
+}
