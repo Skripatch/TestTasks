@@ -1,0 +1,9 @@
+<% if params[:action]=='contacts' %>
+<% end %>
+<% @products.each do |product| %>
+    <div class="baloon">
+    <b><%= link_to product.name, product %></b>
+
+    </div>
+<% end %>
+<%= link_to 'Add new product', new_product_path() %>

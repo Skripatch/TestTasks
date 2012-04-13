@@ -1,0 +1,52 @@
+<h1>New product</h1>
+
+<%= form_for(@product) do |f| %>
+    <% if @product.errors.any? %>
+      <div id="error_explanation">
+        <h2><%= pluralize(@product.errors.count, "error") %> prohibited this user from being saved:</h2>
+
+        <ul>
+        <% @product.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="field">
+      <%= f.label :name %>:
+      <%= f.text_field :name %>
+    </div>
+  <div class="actions">
+    <div>
+      <%= f.label 'Field name' %>
+      <input type="text" value="" id="input_name" />
+      <input id="product_add_field" type="button" value="Add field" />
+    </div>
+    <%= f.submit %>
+  </div>
+<% end %>
+<script type="text/javascript">
+$('product_add_field').observe('click', OnField);
+function OnField(event){
+    var new_field_name = $('input_name').value;
+    if(new_field_name){
+        var div   = new Element('div', {class: "Field"});
+        var label = new Element('label', {for:"product_"+new_field_name});
+        label.update(new_field_name);
+        var input = new Element('input', {
+            id: "product_"+new_field_name,
+            name: "product["+new_field_name+"]",
+            sice: "30",
+            type: "text"
+        });
+        div.insert(label);
+        div.insert(":");
+        div.insert(input);
+        var $actions = $$('div.actions')[0];
+        $actions.insert({before: div});
+
+    }
+}
+</script>
+<%= link_to 'Back', products_path %>
